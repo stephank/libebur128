@@ -5,7 +5,6 @@
 #include <float.h>
 #include <limits.h>
 #include <math.h> /* You may have to define _USE_MATH_DEFINES if you use MSVC */
-#include <stdio.h>
 #include <stdlib.h>
 
 /* This can be replaced by any BSD-like queue implementation. */
@@ -260,17 +259,12 @@ static int ebur128_init_filter(ebur128_state* st) {
   pa[1] = 2.0 * (K * K - 1.0) / a0;
   pa[2] = (1.0 - K / Q + K * K) / a0;
 
-  /* fprintf(stderr, "%.14f %.14f %.14f %.14f %.14f\n",
-                     b1[0], b1[1], b1[2], a1[1], a1[2]); */
-
   f0 = 38.13547087602444;
   Q = 0.5003270373238773;
   K = tan(M_PI * f0 / (double) st->samplerate);
 
   ra[1] = 2.0 * (K * K - 1.0) / (1.0 + K / Q + K * K);
   ra[2] = (1.0 - K / Q + K * K) / (1.0 + K / Q + K * K);
-
-  /* fprintf(stderr, "%.14f %.14f\n", a2[1], a2[2]); */
 
   st->d->b[0] = pb[0] * rb[0];
   st->d->b[1] = pb[0] * rb[1] + pb[1] * rb[0];
@@ -777,7 +771,6 @@ int ebur128_set_channel(ebur128_state* st,
   }
   if (value == EBUR128_DUAL_MONO &&
       (st->channels != 1 || channel_number != 0)) {
-    fprintf(stderr, "EBUR128_DUAL_MONO only works with mono files!\n");
     return 1;
   }
   st->d->channel_map[channel_number] = value;
